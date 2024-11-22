@@ -54,6 +54,7 @@ class TokenTypes:
 
         self.FUNCTION = "FUNCTION"
         self.CLASS = "CLASS"
+        self.VAR = "VAR"
 
         self.EOF = "EOF"
 
@@ -70,10 +71,15 @@ class TokenTypes:
             "true": self.TRUE,
             "false": self.FALSE,
             "function": self.FUNCTION,
-            "class": self.CLASS
+            "class": self.CLASS,
+            "var": self.VAR,
         }
 
         self.built_in_functions = {
             "print": "PRINT",
             "input": "INPUT",
+            "str": "STRING",
+            "int": "INT",
+            "float": "FLOAT",
+            "bool": "BOOLEAN"
         }

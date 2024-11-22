@@ -101,7 +101,7 @@ class Lexer:
                 self.tokens.append(self.make_string())
             elif current_char.isnumeric():
                 self.tokens.append(self.make_number(current_char))
-            elif current_char.isalpha():
+            elif current_char.isalpha() or current_char == '_':
                 self.tokens.append(self.make_identifier(current_char))
             else:
                 raise InvalidCharacterError(current_char)
