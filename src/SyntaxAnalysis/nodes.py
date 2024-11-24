@@ -5,7 +5,7 @@ class ProgramNode:
     def dictionary(self):
         return {
             "node_type": "ProgramNode",
-            "body_ast": [ast.dictionary() for ast in self.body_ast]
+            "body_ast": [ast.dictionary() for ast in self.body_ast if ast]
         }
 
     def __repr__(self):
@@ -31,7 +31,7 @@ class ClassDeclaration:
                 }
 
     def __repr__(self):
-        return f"ClassDeclaration(Name: {self.class_name}, Extends: {self.extends_class_name}, Fields: {self.fields}, Methods: {self.methods})"
+        return f"ClassDeclaration(Name: {self.class_name}, Extends: {self.extends_class_name}, Constructor: {self.constructor}, Fields: {self.fields}, Methods: {self.methods})"
 
 
 class FunctionDeclaration:
@@ -54,7 +54,7 @@ class FunctionDeclaration:
 
 
 class VariableDeclaration:
-    def __init__(self, variable_name, variable_type, initial_value=None):
+    def __init__(self, variable_name, variable_type=None, initial_value=None):
         self.variable_name = variable_name
         self.variable_type = variable_type
         self.initial_value = initial_value
@@ -123,7 +123,7 @@ class IfStatement:
             "data": {
                 "condition": self.condition.dictionary(),
                 "body_ast": [ast.dictionary() for ast in self.body_ast],
-                "else_body_ast": [ast.dictionary() for ast in self.else_body_ast]
+                "else_body_ast": [ast.dictionary() for ast in self.else_body_ast if ast]
             }
         }
 
@@ -232,7 +232,7 @@ class ClassInstantiation:
             "node_type": "ClassInstantiation",
             "data": {
                 "class_name": self.class_name,
-                "arguments": [arg.dictionary() for arg in self.arguments]
+                "arguments": [arg.dictionary() for arg in self.arguments if arg]
             }
         }
 
@@ -268,7 +268,7 @@ class MethodCall:
         return {
             "node_type": "MethodCall",
             "data": {
-                "instance": self.instance.dictionary(),
+                "instance": self.instance,
                 "method_name": self.method_name,
                 "arguments": [arg.dictionary() for arg in self.arguments]
             }
