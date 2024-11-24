@@ -1,4 +1,5 @@
 from src.LexicalAnalysis.lexer import Lexer
+from src.SyntaxAnalysis.parser import Parser
 
 
 def main():
@@ -6,7 +7,9 @@ def main():
         source_code = f.read()
 
     lexer = Lexer(source_code)
-    lexer.tokenize()
+    parser = Parser(lexer.tokenize())
+    print(parser.parse())
+
 
 
 if __name__ == "__main__":

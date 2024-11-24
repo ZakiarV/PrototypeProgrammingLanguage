@@ -1,0 +1,15 @@
+program      -> (class_decl | func_decl | var_decl | statement)* EOF /*DONE*/
+class_decl   -> "class" IDENTIFIER "{" (var_decl | func_decl)* "}" /*DONE*/
+func_decl    -> "function" IDENTIFIER "(" parameters? ")" block /*DONE*/
+var_decl     -> "var" IDENTIFIER ("=" expression)? ";" /*DONE*/
+statement    -> if_stmt | while_stmt | for_stmt | expr_stmt | block /*DONE*/
+if_stmt      -> "if" "(" expression ")" statement ("else" statement)? /*DONE*/
+while_stmt   -> "while" "(" expression ")" statementn /*DONE*/
+for_stmt     -> "for" "(" expr_stmt expr_stmt? ")" statement /*DONE*/
+block        -> "{" statement* "}" /*DONE*/
+expression   -> equality /*DONE*/
+equality     -> comparison ("==" comparison)* /*DONE*/
+comparison   -> addition ((">" | "<") addition)*
+addition     -> multiplication (("+" | "-") multiplication)* /*DONE*/
+multiplication -> primary (("*" | "/") primary)* /*DONE*/
+primary      -> NUMBER | IDENTIFIER | "(" expression ")" /*DONE*/

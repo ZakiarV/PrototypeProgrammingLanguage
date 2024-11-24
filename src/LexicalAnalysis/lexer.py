@@ -108,8 +108,7 @@ class Lexer:
 
         self.tokens.append(Token(self.token_types.EOF, "EOF"))
 
-        for token in self.tokens:
-            print(token)
+        return self.tokens
 
     def make_string(self):
         string = ""
@@ -121,6 +120,8 @@ class Lexer:
     def make_number(self, first_char):
         number = first_char
         dot_count = 0
+        if len(self.source_code) == 0:
+            return Token(self.token_types.INT, int(number))
         while (self.source_code[0].isnumeric() or self.source_code[0] == ".") and len(self.source_code) > 0:
             if self.source_code[0] == ".":
                 dot_count += 1

@@ -56,6 +56,8 @@ class TokenTypes:
         self.CLASS = "CLASS"
         self.VAR = "VAR"
 
+        self.NEW = "NEW"
+
         self.EOF = "EOF"
 
         self.KEYWORDS = {
@@ -73,6 +75,7 @@ class TokenTypes:
             "function": self.FUNCTION,
             "class": self.CLASS,
             "var": self.VAR,
+            "new": self.NEW
         }
 
         self.built_in_functions = {

@@ -1,0 +1,17 @@
+class Print {
+    function init(message_: string) {
+        var message: string = message_;
+    }
+    function print() {
+        console.log(message);
+    }
+}
+
+class HelloWorld (Print) {
+    function init() {
+        Print.init("Hello, World!");
+    }
+}
+
+var hello: HelloWorld = new HelloWorld();
+hello.print();
