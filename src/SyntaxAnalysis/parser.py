@@ -33,10 +33,8 @@ class Parser:
         return program
 
     def parse_program(self):
-        print("Parsing program")
         body = []
         while self.tokens[0].type != self.token_types.EOF:
-            print(self.tokens)
             if self.tokens[0].type == self.token_types.CLASS:
                 body.append(self.parse_class_declaration())
             elif self.tokens[0].type == self.token_types.FUNCTION:
@@ -50,7 +48,6 @@ class Parser:
         return body
 
     def parse_class_declaration(self):
-        print("Parsing class declaration")
         self.tokens.pop(0) # remove class token
         class_name = self.tokens.pop(0).value # get class name
         if self.tokens[0].type != self.token_types.LBRACE:
@@ -72,7 +69,6 @@ class Parser:
         return ClassDeclaration(class_name, None, fields, methods, constructor)
 
     def parse_function_declaration(self, is_constructor=False, class_name=None):
-        print("Parsing function declaration")
         self.tokens.pop(0)
         function_name = self.tokens.pop(0).value
         if self.tokens[0].type != self.token_types.LPAREN:
@@ -103,7 +99,6 @@ class Parser:
         return FunctionDeclaration(function_name, parameters, body)
 
     def parse_statement(self):
-        print("Parsing statement")
         if self.tokens[0].type == self.token_types.VAR:
             return self.parse_variable_declaration()
         elif self.tokens[0].type == self.token_types.IF:
@@ -122,7 +117,6 @@ class Parser:
             raise Exception("Unexpected token " + str(self.tokens[0].value) + " in statement.")
 
     def parse_variable_declaration(self, is_parameter=False):
-        print("Parsing variable declaration")
         if not is_parameter:
             self.tokens.pop(0)
         variable_name = self.tokens.pop(0).value
@@ -145,12 +139,10 @@ class Parser:
             return VariableDeclaration(variable_name, variable_type, None)
 
     def parse_return_statement(self):
-        print("Parsing return statement")
         self.tokens.pop(0)
         return ReturnStatement(self.parse_statement())
 
     def parse_variable_assignment(self):
-        print("Parsing variable assignment")
         variable_name = self.tokens.pop(0).value
         if self.tokens[0].type not in [self.token_types.ASSIGN, self.token_types.MOD_EQ, self.token_types.PLUS_EQ, self.token_types.MINUS_EQ, self.token_types.MUL_EQ, self.token_types.DIV_EQ]:
             raise Exception("Expected assignment operator after variable name in variable assignment but got " + str(self.tokens[0].value) + " instead.")
@@ -159,7 +151,6 @@ class Parser:
         return VariableAssignment(variable_name, value)
 
     def parse_if_statement(self):
-        print("Parsing if statement")
         self.tokens.pop(0)
         if self.tokens[0].type != self.token_types.LPAREN:
             raise Exception("Expected ( after if in if statement but got " + str(self.tokens[0].value) + " instead.")
@@ -201,7 +192,6 @@ class Parser:
         return IfStatement(condition, body, else_body)
 
     def parse_while_statement(self):
-        print("Parsing while statement")
         self.tokens.pop(0)
         if self.tokens[0].type != self.token_types.LPAREN:
             raise Exception("Expected ( after while in while statement but got " + str(self.tokens[0].value) + " instead.")
@@ -227,7 +217,6 @@ class Parser:
         return WhileStatement(condition, body)
 
     def parse_for_statement(self):
-        print("Parsing for statement")
         self.tokens.pop(0)
         if self.tokens[0].type != self.token_types.LPAREN:
             raise Exception("Expected ( after for in for statement but got " + str(self.tokens[0].value) + " instead.")
@@ -261,7 +250,6 @@ class Parser:
         return ForStatement(initializer, condition, increment, body)
 
     def parse_expression(self):
-        print("Parsing expression")
         if self.tokens[0].type == self.token_types.NEW:
             return self.parse_class_instantiation()
         elif self.tokens[0].type == self.token_types.IDENTIFIER:
@@ -272,7 +260,6 @@ class Parser:
             return self.parse_equality()
 
     def parse_class_instantiation(self):
-        print("Parsing class instantiation")
         self.tokens.pop(0) # remove new token
         class_name = self.tokens.pop(0).value
         if self.tokens[0].type != self.token_types.LPAREN:
@@ -289,7 +276,6 @@ class Parser:
         return ClassInstantiation(class_name, arguments)
 
     def parse_identifier(self):
-        print("Parsing identifier")
         if self.tokens[1].type == self.token_types.LPAREN:
             return self.parse_function_call()
         elif self.tokens[1].type == self.token_types.ASSIGN:
@@ -300,7 +286,6 @@ class Parser:
             return self.parse_equality()
 
     def parse_equality(self):
-        print("Parsing equality")
         left = self.parse_comparison()
         while self.tokens[0].type in [self.token_types.EQ, self.token_types.NEQ]:
             operator = self.tokens.pop(0).type
@@ -309,7 +294,6 @@ class Parser:
         return left
 
     def parse_comparison(self):
-        print("Parsing comparison")
         left = self.parse_term()
         while self.tokens[0].type in [self.token_types.GT, self.token_types.GTE, self.token_types.LT, self.token_types.LTE]:
             operator = self.tokens.pop(0).type
@@ -318,7 +302,6 @@ class Parser:
         return left
 
     def parse_term(self):
-        print("Parsing term")
         left = self.parse_factor()
         while self.tokens[0].type in [self.token_types.PLUS, self.token_types.MINUS]:
             operator = self.tokens.pop(0).type
@@ -327,7 +310,6 @@ class Parser:
         return left
 
     def parse_factor(self):
-        print("Parsing factor")
         left = self.parse_primary()
         while self.tokens[0].type in [self.token_types.MUL, self.token_types.DIV]:
             operator = self.tokens.pop(0).type
@@ -336,7 +318,6 @@ class Parser:
         return left
 
     def parse_primary(self):
-        print("Parsing primary")
         if self.tokens[0].type in [self.token_types.INT, self.token_types.FLOAT, self.token_types.STRING, self.token_types.BOOLEAN]:
             return ValueNode(self.tokens.pop(0))
         elif self.tokens[0].type == self.token_types.LPAREN:
@@ -350,7 +331,6 @@ class Parser:
             return ValueNode(self.tokens.pop(0))
 
     def parse_field_method_access(self):
-        print("Parsing field or method access")
         instance = self.tokens.pop(0).value
         self.tokens.pop(0)
         if self.tokens[1].type == self.token_types.LPAREN:
@@ -359,12 +339,10 @@ class Parser:
             return self.parse_field_access(instance)
 
     def parse_field_access(self, instance):
-        print("Parsing field access")
         field = self.tokens.pop(0).value
         return FieldAccess(instance, field)
 
     def parse_method_call(self, instance):
-        print("Parsing method call")
         method_name = self.tokens.pop(0).value
         if self.tokens[0].type != self.token_types.LPAREN:
             raise Exception("Expected ( after method name in method call but got " + str(self.tokens[0].value) + " instead.")
@@ -380,7 +358,6 @@ class Parser:
         return MethodCall(instance, method_name, arguments)
 
     def parse_function_call(self):
-        print("Parsing function call")
         function_name = self.tokens.pop(0).value
         if self.tokens[0].type != self.token_types.LPAREN:
             raise Exception("Expected ( after function name in function call but got " + str(self.tokens[0].value) + " instead.")
