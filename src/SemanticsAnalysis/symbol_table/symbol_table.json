@@ -1,0 +1,136 @@
+{
+    "type": "ProgramSymbolTable",
+    "data": {
+        "name": "main",
+        "parent": null,
+        "scope_level": 0,
+        "variables": {
+            "helloWorld": "HelloWorld",
+            "a": "INT",
+            "b": "INT"
+        },
+        "functions": {
+            "test": {
+                "type": "FunctionSymbolTable",
+                "data": {
+                    "function_name": "test",
+                    "parent": "main",
+                    "scope_level": 1,
+                    "parameters": {
+                        "c": "INT",
+                        "d": "INT"
+                    },
+                    "variables": {
+                        "a": "INT",
+                        "b": "INT"
+                    },
+                    "for_loop_vars": {},
+                    "return_type": null
+                }
+            }
+        },
+        "built_in_functions": {
+            "print": "void"
+        },
+        "class_declarations": {
+            "Print": {
+                "type": "ClassSymbolTable",
+                "data": {
+                    "class_name": "Print",
+                    "parent": "main",
+                    "extends": null,
+                    "scope_level": 1,
+                    "constructor": {
+                        "type": "FunctionSymbolTable",
+                        "data": {
+                            "function_name": "init",
+                            "parent": "Print",
+                            "scope_level": 2,
+                            "parameters": {
+                                "message_": "STRING"
+                            },
+                            "variables": {},
+                            "for_loop_vars": {},
+                            "return_type": "Print"
+                        }
+                    },
+                    "fields": {
+                        "message": "STRING"
+                    },
+                    "methods": {
+                        "print": {
+                            "type": "FunctionSymbolTable",
+                            "data": {
+                                "function_name": "print",
+                                "parent": "Print",
+                                "scope_level": 2,
+                                "parameters": {},
+                                "variables": {
+                                    "message": "STRING"
+                                },
+                                "for_loop_vars": {},
+                                "return_type": null
+                            }
+                        }
+                    }
+                }
+            },
+            "HelloWorld": {
+                "type": "ClassSymbolTable",
+                "data": {
+                    "class_name": "HelloWorld",
+                    "parent": "main",
+                    "extends": null,
+                    "scope_level": 1,
+                    "constructor": {
+                        "type": "FunctionSymbolTable",
+                        "data": {
+                            "function_name": "init",
+                            "parent": "HelloWorld",
+                            "scope_level": 2,
+                            "parameters": {},
+                            "variables": {},
+                            "for_loop_vars": {},
+                            "return_type": "HelloWorld"
+                        }
+                    },
+                    "fields": {
+                        "message": "STRING",
+                        "prints": "Print",
+                        "fun": "STRING"
+                    },
+                    "methods": {
+                        "happy": {
+                            "type": "FunctionSymbolTable",
+                            "data": {
+                                "function_name": "happy",
+                                "parent": "HelloWorld",
+                                "scope_level": 2,
+                                "parameters": {
+                                    "hello": "STRING"
+                                },
+                                "variables": {
+                                    "message": "STRING",
+                                    "prints": "Print"
+                                },
+                                "for_loop_vars": {},
+                                "return_type": "STRING"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "for_loop_vars": {
+            "i": {
+                "type": "ForSymbolTable",
+                "data": {
+                    "loop_variable": "i",
+                    "loop_variable_type": "INT",
+                    "parent": "main",
+                    "scope_level": 0
+                }
+            }
+        }
+    }
+}
