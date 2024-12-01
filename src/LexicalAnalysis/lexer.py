@@ -143,7 +143,5 @@ class Lexer:
 
         if identifier in self.token_types.KEYWORDS:
             return Token(self.token_types.KEYWORDS[identifier], identifier)
-        elif identifier in self.token_types.built_in_functions:
-            return Token(self.token_types.built_in_functions[identifier], identifier)
         else:
             return Token(self.token_types.IDENTIFIER, identifier)

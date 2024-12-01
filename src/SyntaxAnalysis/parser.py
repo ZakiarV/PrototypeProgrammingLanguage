@@ -1,4 +1,5 @@
 import json
+
 from .nodes import ProgramNode
 from .nodes import ClassDeclaration
 from .nodes import FunctionDeclaration
@@ -28,7 +29,7 @@ class Parser:
     def parse(self):
         program = ProgramNode(self.parse_program())
         self.ast = program.dictionary()
-        with open("src/SemanticsAnalysis/ast.json", "w") as file:
+        with open("src/SyntaxAnalysis/ast.json", "w") as file:
             json.dump(self.ast, file, indent=4)
         return program
 
@@ -50,6 +51,14 @@ class Parser:
     def parse_class_declaration(self):
         self.tokens.pop(0) # remove class token
         class_name = self.tokens.pop(0).value # get class name
+        class_extends = None
+        if self.tokens[0].type == self.token_types.LPAREN:
+            self.tokens.pop(0)
+            class_extends = self.tokens.pop(0).value
+            if self.tokens[0].type != self.token_types.RPAREN:
+                raise Exception("Expected ) after extends class name in class declaration " + str(
+                    class_extends) + " but got " + str(self.tokens[0].value) + " instead.")
+            self.tokens.pop(0)  # remove )
         if self.tokens[0].type != self.token_types.LBRACE:
             raise Exception("Expected { after class name in class declaration " + str(class_name) + " but got " + str(self.tokens[0].value) + " instead.")
         self.tokens.pop(0) # remove {
@@ -60,15 +69,19 @@ class Parser:
             if self.tokens[0].type == self.token_types.FUNCTION and self.tokens[1].value == "init":
                 constructor = self.parse_function_declaration(is_constructor=True, class_name=class_name)
             elif self.tokens[0].type == self.token_types.FUNCTION:
-                methods.append(self.parse_function_declaration())
+                methods.append(self.parse_function_declaration(is_method=True, class_name=class_name))
             elif self.tokens[0].type == self.token_types.VAR:
-                fields.append(self.parse_variable_declaration())
+                fields.append(self.parse_variable_declaration(is_field=True, class_name=class_name))
+            elif self.tokens[0].type == self.token_types.SEMICOLON:
+                self.tokens.pop(0)
+            elif self.tokens[0].type == self.token_types.IDENTIFIER:
+                self.parse_function_call()
         if self.tokens[0].type != self.token_types.RBRACE:
             raise Exception("Expected } at the end of class declaration " + str(class_name) + " but got " + str(self.tokens[0].value) + " instead.")
         self.tokens.pop(0) # remove }
-        return ClassDeclaration(class_name, None, fields, methods, constructor)
+        return ClassDeclaration(class_name, class_extends, fields, methods, constructor)
 
-    def parse_function_declaration(self, is_constructor=False, class_name=None):
+    def parse_function_declaration(self, is_constructor=False, is_method=False, class_name=None):
         self.tokens.pop(0)
         function_name = self.tokens.pop(0).value
         if self.tokens[0].type != self.token_types.LPAREN:
@@ -76,7 +89,9 @@ class Parser:
         self.tokens.pop(0)
         parameters = []
         while self.tokens[0].type != self.token_types.RPAREN and self.tokens[0].type != self.token_types.EOF:
-            parameters.append(self.parse_variable_declaration(is_parameter=True))
+            parameters.append(self.parse_variable_declaration(is_parameter=True, function_name=function_name, class_name=class_name))
+            if self.tokens[0].type == self.token_types.COMMA:
+                self.tokens.pop(0)
         if self.tokens[0].type != self.token_types.RPAREN:
             raise Exception("Expected ) after function parameters in function declaration " + str(function_name) + " but got " + str(self.tokens[0].value) + " instead.")
         self.tokens.pop(0) # remove )
@@ -86,7 +101,7 @@ class Parser:
         body = []
         while self.tokens[0].type != self.token_types.RBRACE and self.tokens[0].type != self.token_types.EOF:
             if self.tokens[0].type in [self.token_types.VAR, self.token_types.IF, self.token_types.WHILE, self.token_types.FOR, self.token_types.RETURN, self.token_types.IDENTIFIER]:
-                body.append(self.parse_statement())
+                body.append(self.parse_statement(is_function_var_decl=True, function_name=function_name, class_name=class_name))
             elif self.tokens[0].type == self.token_types.SEMICOLON:
                 self.tokens.pop(0)
             else:
@@ -96,11 +111,13 @@ class Parser:
         self.tokens.pop(0) # remove }
         if is_constructor:
             return ClassConstructor(class_name, parameters, body)
+        if is_method:
+            return FunctionDeclaration(function_name, parameters, body, class_name)
         return FunctionDeclaration(function_name, parameters, body)
 
-    def parse_statement(self):
+    def parse_statement(self, is_parameter=False, is_field=False, is_function_var_decl=False, class_name=None, function_name=None):
         if self.tokens[0].type == self.token_types.VAR:
-            return self.parse_variable_declaration()
+            return self.parse_variable_declaration(is_parameter=is_parameter, is_field=is_field, is_function_var_decl=is_function_var_decl, class_name=class_name, function_name=function_name)
         elif self.tokens[0].type == self.token_types.IF:
             return self.parse_if_statement()
         elif self.tokens[0].type == self.token_types.WHILE:
@@ -116,7 +133,7 @@ class Parser:
         else:
             raise Exception("Unexpected token " + str(self.tokens[0].value) + " in statement.")
 
-    def parse_variable_declaration(self, is_parameter=False):
+    def parse_variable_declaration(self, is_parameter=False, is_field=False, is_function_var_decl=False, class_name=None, function_name=None):
         if not is_parameter:
             self.tokens.pop(0)
         variable_name = self.tokens.pop(0).value
@@ -124,19 +141,34 @@ class Parser:
             if self.tokens[0].type != self.token_types.COLON:
                 raise Exception("Expected : after parameter name in function declaration but got " + str(self.tokens[0].value) + " instead.")
             self.tokens.pop(0)
-            variable_type = self.tokens.pop(0).value
+            variable_type = self.tokens.pop(0).type
         else:
             if self.tokens[0].type == self.token_types.COLON:
                 self.tokens.pop(0)
-                variable_type = self.tokens.pop(0).value
+                variable_type = self.tokens.pop(0).type
             else:
                 variable_type = None
         if self.tokens[0].type == self.token_types.ASSIGN:
             self.tokens.pop(0)
             value = self.parse_expression()
-            return VariableDeclaration(variable_name, variable_type, value)
+            if is_field:
+                return VariableDeclaration(variable_name, variable_type, value, class_name=class_name)
+            elif is_parameter:
+                return VariableDeclaration(variable_name, variable_type, value, function_name=function_name, is_parameter=is_parameter, class_name=class_name)
+            elif is_function_var_decl:
+                return VariableDeclaration(variable_name, variable_type, value, function_name=function_name, class_name=class_name)
+            else:
+                return VariableDeclaration(variable_name, variable_type, value)
+        if variable_type is None:
+            raise Exception("Expected variable type or value after var in variable declaration.")
+        if is_field:
+            return VariableDeclaration(variable_name, variable_type, None, class_name)
+        elif is_parameter:
+            return VariableDeclaration(variable_name, variable_type, None, function_name=function_name, is_parameter=is_parameter, class_name=class_name)
+        elif is_function_var_decl:
+            return VariableDeclaration(variable_name, variable_type, None, function_name=function_name, class_name=class_name)
         else:
-            return VariableDeclaration(variable_name, variable_type, None)
+            return VariableDeclaration(variable_name, variable_type)
 
     def parse_return_statement(self):
         self.tokens.pop(0)
@@ -370,4 +402,6 @@ class Parser:
         if self.tokens[0].type != self.token_types.RPAREN:
             raise Exception("Expected ) after function call arguments but got " + str(self.tokens[0].value) + " instead.")
         self.tokens.pop(0)
+        if function_name in self.token_types.built_in_functions:
+            return FunctionCall(function_name, arguments, is_builtin=True)
         return FunctionCall(function_name, arguments)

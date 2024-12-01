@@ -1,0 +1,664 @@
+{
+    "node_type": "ProgramNode",
+    "body_ast": [
+        {
+            "node_type": "ClassDeclaration",
+            "data": {
+                "class_name": "Print",
+                "extends_class_name": null,
+                "constructor": {
+                    "node_type": "ClassConstructor",
+                    "data": {
+                        "class_name": "Print",
+                        "parameters": [
+                            {
+                                "node_type": "ParameterDeclaration",
+                                "data": {
+                                    "function_name": "init",
+                                    "variable_name": "message_",
+                                    "variable_type": "STRING",
+                                    "initial_value": null
+                                }
+                            }
+                        ],
+                        "body_ast": [
+                            {
+                                "node_type": "FunctionVariableDeclaration",
+                                "data": {
+                                    "function_name": "init",
+                                    "variable_name": "message",
+                                    "variable_type": "STRING",
+                                    "initial_value": {
+                                        "node_type": "ValueNode",
+                                        "data": {
+                                            "type": "IDENTIFIER",
+                                            "value": "message_"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                "fields": [],
+                "methods": [
+                    {
+                        "node_type": "MethodDeclaration",
+                        "data": {
+                            "class_name": "Print",
+                            "function_name": "print",
+                            "parameters": [],
+                            "body_ast": [
+                                {
+                                    "node_type": "FunctionVariableDeclaration",
+                                    "data": {
+                                        "function_name": "print",
+                                        "variable_name": "message",
+                                        "variable_type": "STRING",
+                                        "initial_value": {
+                                            "node_type": "ValueNode",
+                                            "data": {
+                                                "type": "STRING",
+                                                "value": "HELLOOOOOOOOOO"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "node_type": "ClassDeclaration",
+            "data": {
+                "class_name": "HelloWorld",
+                "extends_class_name": null,
+                "constructor": {
+                    "node_type": "ClassConstructor",
+                    "data": {
+                        "class_name": "HelloWorld",
+                        "parameters": [],
+                        "body_ast": [
+                            {
+                                "node_type": "FunctionVariableDeclaration",
+                                "data": {
+                                    "function_name": "init",
+                                    "variable_name": "message",
+                                    "variable_type": "STRING",
+                                    "initial_value": {
+                                        "node_type": "ValueNode",
+                                        "data": {
+                                            "type": "STRING",
+                                            "value": "Hello, World!"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "node_type": "FunctionVariableDeclaration",
+                                "data": {
+                                    "function_name": "init",
+                                    "variable_name": "prints",
+                                    "variable_type": "IDENTIFIER",
+                                    "initial_value": {
+                                        "node_type": "ClassInstantiation",
+                                        "data": {
+                                            "class_name": "Print",
+                                            "arguments": [
+                                                {
+                                                    "node_type": "ValueNode",
+                                                    "data": {
+                                                        "type": "IDENTIFIER",
+                                                        "value": "message"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "node_type": "MethodCall",
+                                "data": {
+                                    "instance": "prints",
+                                    "method_name": "print",
+                                    "arguments": []
+                                }
+                            },
+                            {
+                                "node_type": "FunctionCall",
+                                "data": {
+                                    "function_name": "print",
+                                    "arguments": [
+                                        {
+                                            "node_type": "ValueNode",
+                                            "data": {
+                                                "type": "IDENTIFIER",
+                                                "value": "message"
+                                            }
+                                        }
+                                    ],
+                                    "is_builtin": true
+                                }
+                            }
+                        ]
+                    }
+                },
+                "fields": [
+                    {
+                        "node_type": "FieldDeclaration",
+                        "data": {
+                            "class_name": "HelloWorld",
+                            "variable_name": "fun",
+                            "variable_type": "STRING",
+                            "initial_value": {
+                                "node_type": "ValueNode",
+                                "data": {
+                                    "type": "STRING",
+                                    "value": "Hello, World!"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "methods": [
+                    {
+                        "node_type": "MethodDeclaration",
+                        "data": {
+                            "class_name": "HelloWorld",
+                            "function_name": "happy",
+                            "parameters": [
+                                {
+                                    "node_type": "ParameterDeclaration",
+                                    "data": {
+                                        "function_name": "happy",
+                                        "variable_name": "hello",
+                                        "variable_type": "STRING",
+                                        "initial_value": null
+                                    }
+                                }
+                            ],
+                            "body_ast": [
+                                {
+                                    "node_type": "FunctionVariableDeclaration",
+                                    "data": {
+                                        "function_name": "happy",
+                                        "variable_name": "message",
+                                        "variable_type": "STRING",
+                                        "initial_value": {
+                                            "node_type": "ValueNode",
+                                            "data": {
+                                                "type": "IDENTIFIER",
+                                                "value": "hello"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "node_type": "FunctionVariableDeclaration",
+                                    "data": {
+                                        "function_name": "happy",
+                                        "variable_name": "prints",
+                                        "variable_type": "IDENTIFIER",
+                                        "initial_value": {
+                                            "node_type": "ClassInstantiation",
+                                            "data": {
+                                                "class_name": "Print",
+                                                "arguments": [
+                                                    {
+                                                        "node_type": "ValueNode",
+                                                        "data": {
+                                                            "type": "IDENTIFIER",
+                                                            "value": "message"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "node_type": "MethodCall",
+                                    "data": {
+                                        "instance": "prints",
+                                        "method_name": "print",
+                                        "arguments": []
+                                    }
+                                },
+                                {
+                                    "node_type": "ReturnStatement",
+                                    "data": {
+                                        "expression": {
+                                            "node_type": "ValueNode",
+                                            "data": {
+                                                "type": "IDENTIFIER",
+                                                "value": "message"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "node_type": "VariableDeclaration",
+            "data": {
+                "variable_name": "helloWorld",
+                "variable_type": "IDENTIFIER",
+                "initial_value": {
+                    "node_type": "ClassInstantiation",
+                    "data": {
+                        "class_name": "HelloWorld",
+                        "arguments": []
+                    }
+                }
+            }
+        },
+        {
+            "node_type": "MethodCall",
+            "data": {
+                "instance": "helloWorld",
+                "method_name": "happy",
+                "arguments": [
+                    {
+                        "node_type": "ValueNode",
+                        "data": {
+                            "type": "STRING",
+                            "value": "Hello, World!"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "node_type": "VariableDeclaration",
+            "data": {
+                "variable_name": "a",
+                "variable_type": null,
+                "initial_value": {
+                    "node_type": "ValueNode",
+                    "data": {
+                        "type": "INT",
+                        "value": 1
+                    }
+                }
+            }
+        },
+        {
+            "node_type": "VariableAssignment",
+            "data": {
+                "variable_name": "a",
+                "expression": {
+                    "node_type": "ValueNode",
+                    "data": {
+                        "type": "INT",
+                        "value": 2
+                    }
+                }
+            }
+        },
+        {
+            "node_type": "VariableDeclaration",
+            "data": {
+                "variable_name": "g",
+                "variable_type": "INT",
+                "initial_value": null
+            }
+        },
+        {
+            "node_type": "VariableDeclaration",
+            "data": {
+                "variable_name": "b",
+                "variable_type": null,
+                "initial_value": {
+                    "node_type": "ValueNode",
+                    "data": {
+                        "type": "INT",
+                        "value": 1
+                    }
+                }
+            }
+        },
+        {
+            "node_type": "IfStatement",
+            "data": {
+                "condition": {
+                    "node_type": "BinaryOperationNode",
+                    "data": {
+                        "left": {
+                            "node_type": "ValueNode",
+                            "data": {
+                                "type": "IDENTIFIER",
+                                "value": "a"
+                            }
+                        },
+                        "operator": "EQ",
+                        "right": {
+                            "node_type": "ValueNode",
+                            "data": {
+                                "type": "INT",
+                                "value": 1
+                            }
+                        }
+                    }
+                },
+                "body_ast": [
+                    {
+                        "node_type": "VariableAssignment",
+                        "data": {
+                            "variable_name": "b",
+                            "expression": {
+                                "node_type": "ValueNode",
+                                "data": {
+                                    "type": "INT",
+                                    "value": 2
+                                }
+                            }
+                        }
+                    }
+                ],
+                "else_body_ast": []
+            }
+        },
+        {
+            "node_type": "FunctionDeclaration",
+            "data": {
+                "function_name": "test",
+                "parameters": [
+                    {
+                        "node_type": "ParameterDeclaration",
+                        "data": {
+                            "function_name": "test",
+                            "variable_name": "c",
+                            "variable_type": "INT",
+                            "initial_value": null
+                        }
+                    },
+                    {
+                        "node_type": "ParameterDeclaration",
+                        "data": {
+                            "function_name": "test",
+                            "variable_name": "d",
+                            "variable_type": "INT",
+                            "initial_value": null
+                        }
+                    }
+                ],
+                "body_ast": [
+                    {
+                        "node_type": "FunctionVariableDeclaration",
+                        "data": {
+                            "function_name": "test",
+                            "variable_name": "a",
+                            "variable_type": null,
+                            "initial_value": {
+                                "node_type": "BinaryOperationNode",
+                                "data": {
+                                    "left": {
+                                        "node_type": "BinaryOperationNode",
+                                        "data": {
+                                            "left": {
+                                                "node_type": "ValueNode",
+                                                "data": {
+                                                    "type": "IDENTIFIER",
+                                                    "value": "c"
+                                                }
+                                            },
+                                            "operator": "PLUS",
+                                            "right": {
+                                                "node_type": "ValueNode",
+                                                "data": {
+                                                    "type": "INT",
+                                                    "value": 1
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "operator": "MUL",
+                                    "right": {
+                                        "node_type": "ValueNode",
+                                        "data": {
+                                            "type": "INT",
+                                            "value": 2
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "node_type": "FunctionVariableDeclaration",
+                        "data": {
+                            "function_name": "test",
+                            "variable_name": "b",
+                            "variable_type": null,
+                            "initial_value": {
+                                "node_type": "BinaryOperationNode",
+                                "data": {
+                                    "left": {
+                                        "node_type": "BinaryOperationNode",
+                                        "data": {
+                                            "left": {
+                                                "node_type": "ValueNode",
+                                                "data": {
+                                                    "type": "IDENTIFIER",
+                                                    "value": "d"
+                                                }
+                                            },
+                                            "operator": "PLUS",
+                                            "right": {
+                                                "node_type": "ValueNode",
+                                                "data": {
+                                                    "type": "INT",
+                                                    "value": 1
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "operator": "MUL",
+                                    "right": {
+                                        "node_type": "ValueNode",
+                                        "data": {
+                                            "type": "INT",
+                                            "value": 2
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "node_type": "FunctionCall",
+            "data": {
+                "function_name": "test",
+                "arguments": [
+                    {
+                        "node_type": "ValueNode",
+                        "data": {
+                            "type": "IDENTIFIER",
+                            "value": "a"
+                        }
+                    },
+                    {
+                        "node_type": "ValueNode",
+                        "data": {
+                            "type": "IDENTIFIER",
+                            "value": "b"
+                        }
+                    }
+                ],
+                "is_builtin": false
+            }
+        },
+        {
+            "node_type": "WhileStatement",
+            "data": {
+                "condition": {
+                    "node_type": "BinaryOperationNode",
+                    "data": {
+                        "left": {
+                            "node_type": "ValueNode",
+                            "data": {
+                                "type": "IDENTIFIER",
+                                "value": "a"
+                            }
+                        },
+                        "operator": "LT",
+                        "right": {
+                            "node_type": "ValueNode",
+                            "data": {
+                                "type": "INT",
+                                "value": 10
+                            }
+                        }
+                    }
+                },
+                "body_ast": [
+                    {
+                        "node_type": "VariableAssignment",
+                        "data": {
+                            "variable_name": "a",
+                            "expression": {
+                                "node_type": "BinaryOperationNode",
+                                "data": {
+                                    "left": {
+                                        "node_type": "ValueNode",
+                                        "data": {
+                                            "type": "IDENTIFIER",
+                                            "value": "a"
+                                        }
+                                    },
+                                    "operator": "PLUS",
+                                    "right": {
+                                        "node_type": "ValueNode",
+                                        "data": {
+                                            "type": "INT",
+                                            "value": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "node_type": "ForStatement",
+            "data": {
+                "initializer": {
+                    "node_type": "VariableDeclaration",
+                    "data": {
+                        "variable_name": "i",
+                        "variable_type": null,
+                        "initial_value": {
+                            "node_type": "ValueNode",
+                            "data": {
+                                "type": "INT",
+                                "value": 0
+                            }
+                        }
+                    }
+                },
+                "condition": {
+                    "node_type": "BinaryOperationNode",
+                    "data": {
+                        "left": {
+                            "node_type": "ValueNode",
+                            "data": {
+                                "type": "IDENTIFIER",
+                                "value": "i"
+                            }
+                        },
+                        "operator": "LT",
+                        "right": {
+                            "node_type": "ValueNode",
+                            "data": {
+                                "type": "INT",
+                                "value": 10
+                            }
+                        }
+                    }
+                },
+                "increment": {
+                    "node_type": "VariableAssignment",
+                    "data": {
+                        "variable_name": "i",
+                        "expression": {
+                            "node_type": "BinaryOperationNode",
+                            "data": {
+                                "left": {
+                                    "node_type": "ValueNode",
+                                    "data": {
+                                        "type": "IDENTIFIER",
+                                        "value": "i"
+                                    }
+                                },
+                                "operator": "PLUS",
+                                "right": {
+                                    "node_type": "ValueNode",
+                                    "data": {
+                                        "type": "INT",
+                                        "value": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "body_ast": [
+                    {
+                        "node_type": "VariableAssignment",
+                        "data": {
+                            "variable_name": "a",
+                            "expression": {
+                                "node_type": "BinaryOperationNode",
+                                "data": {
+                                    "left": {
+                                        "node_type": "ValueNode",
+                                        "data": {
+                                            "type": "IDENTIFIER",
+                                            "value": "a"
+                                        }
+                                    },
+                                    "operator": "PLUS",
+                                    "right": {
+                                        "node_type": "ValueNode",
+                                        "data": {
+                                            "type": "INT",
+                                            "value": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "node_type": "FunctionCall",
+            "data": {
+                "function_name": "print",
+                "arguments": [
+                    {
+                        "node_type": "ValueNode",
+                        "data": {
+                            "type": "IDENTIFIER",
+                            "value": "a"
+                        }
+                    }
+                ],
+                "is_builtin": true
+            }
+        }
+    ]
+}

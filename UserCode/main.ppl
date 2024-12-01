@@ -1,28 +1,56 @@
 class Print {
     function init(message_: string) {
         var message: string = message_;
-        return message
+    }
+    function print() {
+        var message: string = "HELLOOOOOOOOOO"
     }
 }
 
 class HelloWorld {
+    var fun: string = "Hello, World!";
+    print(fun);
     function init() {
         var message: string = "Hello, World!";
         var prints: Print = new Print(message);
-        var x = prints.print();
+        prints.print();
+        print(message);
+    }
+    function happy(hello: string) {
+        var message: string = hello;
+        var prints: Print = new Print(message);
+        prints.print();
+        return message;
     }
 }
 
 var helloWorld: HelloWorld = new HelloWorld();
+helloWorld.happy("Hello, World!");
 
 var a = 1
 
+a = 2
+
+var g: int
+
+var b = 1
 if (a == 1) {
-    var b = 2
+    b = 2
 }
 
-function test() {
-    var c = 3
+function test(c: int, d: int) {
+    var a = (c + 1) * 2
+    var b = (d + 1) * 2
 }
 
-test()
+test(a, b)
+
+while (a < 10) {
+    a = a + 1
+}
+
+for (var i = 0; i < 10; i = i + 1) {
+    a = a + 1
+}
+
+print(a);

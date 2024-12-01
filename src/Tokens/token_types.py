@@ -81,8 +81,15 @@ class TokenTypes:
         self.built_in_functions = {
             "print": "PRINT",
             "input": "INPUT",
-            "str": "STRING",
+            "str": "str",
+            "int": "int",
+            "float": "float",
+            "bool": "bool"
+        }
+
+        self.types = {
             "int": "INT",
             "float": "FLOAT",
-            "bool": "BOOLEAN"
+            "string": "STRING",
+            "boolean": "BOOLEAN"
         }

@@ -9,7 +9,7 @@ class ProgramNode:
         }
 
     def __repr__(self):
-        return f"ProgramNode(Body: {self.body_ast})"
+        return f"ProgramNode({self.body_ast})"
 
 
 class ClassDeclaration:
@@ -17,7 +17,7 @@ class ClassDeclaration:
         self.class_name = class_name
         self.extends_class_name = extends_class_name
         self.constructor = constructor
-        self.fields = fields
+        self.fields: list = fields
         self.methods = methods
 
     def dictionary(self):
@@ -25,22 +25,32 @@ class ClassDeclaration:
             "class_name": self.class_name,
             "extends_class_name": self.extends_class_name,
             "constructor": self.constructor.dictionary() if self.constructor else None,
-            "fields": [field.dictionary() for field in self.fields],
-            "methods": [method.dictionary() for method in self.methods]
+            "fields": [field.dictionary() for field in self.fields if field],
+            "methods": [method.dictionary() for method in self.methods if method]
         }
                 }
 
     def __repr__(self):
-        return f"ClassDeclaration(Name: {self.class_name}, Extends: {self.extends_class_name}, Constructor: {self.constructor}, Fields: {self.fields}, Methods: {self.methods})"
+        return f"ClassDeclaration({self.class_name}, {self.extends_class_name}, {self.fields}, {self.methods}, {self.constructor})"
 
 
 class FunctionDeclaration:
-    def __init__(self, function_name, parameters, body_ast):
+    def __init__(self, function_name, parameters, body_ast, class_name=None):
         self.function_name = function_name
         self.parameters = parameters
         self.body_ast = body_ast
+        self.class_name = class_name
 
     def dictionary(self):
+        if self.class_name:
+            return {"node_type": "MethodDeclaration", "data":
+                {
+                    "class_name": self.class_name,
+                    "function_name": self.function_name,
+                    "parameters": [parameter.dictionary() for parameter in self.parameters],
+                    "body_ast": [ast.dictionary() for ast in self.body_ast]
+                }
+                    }
         return {"node_type": "FunctionDeclaration", "data":
             {
                 "function_name": self.function_name,
@@ -50,16 +60,49 @@ class FunctionDeclaration:
                 }
 
     def __repr__(self):
-        return f"FunctionDeclaration(Name: {self.function_name}, Parameters: {self.parameters}, Body: {self.body_ast})"
+        return f"FunctionDeclaration({self.function_name}, {self.parameters}, {self.body_ast}, {self.class_name})"
 
 
 class VariableDeclaration:
-    def __init__(self, variable_name, variable_type=None, initial_value=None):
+    def __init__(self, variable_name, variable_type=None, initial_value=None, class_name=None, function_name=None, is_parameter=False):
         self.variable_name = variable_name
         self.variable_type = variable_type
         self.initial_value = initial_value
+        self.class_name = class_name
+        self.function_name = function_name
+        self.is_parameter = is_parameter
 
     def dictionary(self):
+        if self.function_name:
+            if self.is_parameter:
+                return {
+                    "node_type": "ParameterDeclaration",
+                    "data": {
+                        "function_name": self.function_name,
+                        "variable_name": self.variable_name,
+                        "variable_type": self.variable_type,
+                        "initial_value": self.initial_value.dictionary() if self.initial_value else None
+                    }
+                }
+            return {
+                "node_type": "FunctionVariableDeclaration",
+                "data": {
+                    "function_name": self.function_name,
+                    "variable_name": self.variable_name,
+                    "variable_type": self.variable_type,
+                    "initial_value": self.initial_value.dictionary() if self.initial_value else None
+                }
+            }
+        if self.class_name:
+            return {
+                "node_type": "FieldDeclaration",
+                "data": {
+                    "class_name": self.class_name,
+                    "variable_name": self.variable_name,
+                    "variable_type": self.variable_type,
+                    "initial_value": self.initial_value.dictionary() if self.initial_value else None
+                }
+            }
         return {
             "node_type": "VariableDeclaration",
             "data": {
@@ -70,7 +113,7 @@ class VariableDeclaration:
         }
 
     def __repr__(self):
-        return f"VariableDeclaration(Name: {self.variable_name}, Type: {self.variable_type}, Initial Value: {self.initial_value})"
+        return f"VariableDeclaration({self.variable_name}, {self.variable_type}, {self.initial_value}, {self.class_name}, {self.function_name}, {self.is_parameter})"
 
 
 class VariableAssignment:
@@ -88,7 +131,7 @@ class VariableAssignment:
         }
 
     def __repr__(self):
-        return f"VariableAssignment(Variable: {self.variable_name}, Expression: {self.expression})"
+        return f"VariableAssignment({self.variable_name}, {self.expression})"
 
 
 class BinaryOperationNode:
@@ -108,7 +151,7 @@ class BinaryOperationNode:
         }
 
     def __repr__(self):
-        return f"BinaryOperationNode(Left: {self.left}, Operator: {self.operator}, Right: {self.right})"
+        return f"BinaryOperationNode({self.left}, {self.operator}, {self.right})"
 
 
 class IfStatement:
@@ -128,7 +171,7 @@ class IfStatement:
         }
 
     def __repr__(self):
-        return f"IfStatement(Condition: {self.condition}, Body: {self.body_ast}, Else Body: {self.else_body_ast})"
+        return f"IfStatement({self.condition}, {self.body_ast}, {self.else_body_ast})"
 
 
 class WhileStatement:
@@ -146,7 +189,7 @@ class WhileStatement:
         }
 
     def __repr__(self):
-        return f"WhileStatement(Condition: {self.condition}, Body: {self.body_ast})"
+        return f"WhileStatement({self.condition}, {self.body_ast})"
 
 
 class ForStatement:
@@ -168,7 +211,7 @@ class ForStatement:
         }
 
     def __repr__(self):
-        return f"ForStatement(Initializer: {self.initializer}, Condition: {self.condition}, Increment: {self.increment}, Body: {self.body_ast})"
+        return f"ForStatement({self.initializer}, {self.condition}, {self.increment}, {self.body_ast})"
 
 
 class ValueNode:
@@ -185,25 +228,27 @@ class ValueNode:
         }
 
     def __repr__(self):
-        return f"ValueNode(Value: {self.token})"
+        return f"ValueNode({self.token})"
 
 
 class FunctionCall:
-    def __init__(self, function_name, arguments):
+    def __init__(self, function_name, arguments, is_builtin=False):
         self.function_name = function_name
         self.arguments = arguments
+        self.is_builtin = is_builtin
 
     def dictionary(self):
         return {
             "node_type": "FunctionCall",
             "data": {
                 "function_name": self.function_name,
-                "arguments": [arg.dictionary() for arg in self.arguments]
+                "arguments": [arg.dictionary() for arg in self.arguments],
+                "is_builtin": self.is_builtin
             }
         }
 
     def __repr__(self):
-        return f"FunctionCall(Function: {self.function_name}, Arguments: {self.arguments})"
+        return f"FunctionCall({self.function_name}, {self.arguments})"
 
 
 class ReturnStatement:
@@ -219,7 +264,7 @@ class ReturnStatement:
         }
 
     def __repr__(self):
-        return f"ReturnStatement(Expression: {self.expression})"
+        return f"ReturnStatement({self.expression})"
 
 
 class ClassInstantiation:
@@ -237,7 +282,7 @@ class ClassInstantiation:
         }
 
     def __repr__(self):
-        return f"ClassInstantiation(Class: {self.class_name}, Arguments: {self.arguments})"
+        return f"ClassInstantiation({self.class_name}, {self.arguments})"
 
 
 class FieldAccess:
@@ -255,7 +300,7 @@ class FieldAccess:
         }
 
     def __repr__(self):
-        return f"FieldAccess(Instance: {self.instance}, Field: {self.field_name})"
+        return f"FieldAccess({self.instance}, {self.field_name})"
 
 
 class MethodCall:
@@ -275,7 +320,7 @@ class MethodCall:
         }
 
     def __repr__(self):
-        return f"MethodCall(Instance: {self.instance}, Method: {self.method_name}, Arguments: {self.arguments})"
+        return f"MethodCall({self.instance}, {self.method_name}, {self.arguments})"
 
 
 class ClassConstructor:
@@ -288,10 +333,10 @@ class ClassConstructor:
         return {"node_type": "ClassConstructor", "data":
             {
                 "class_name": self.class_name,
-                "parameters": [parameter.dictionary() for parameter in self.parameters],
+                "parameters": [parameter.dictionary() for parameter in self.parameters if parameter],
                 "body_ast": [ast.dictionary() for ast in self.body_ast]
             }
                 }
 
     def __repr__(self):
-        return f"ClassConstructor(Name: {self.class_name}, Parameters: {self.parameters}, Body: {self.body_ast})"
+        return f"ClassConstructor({self.class_name}, {self.parameters}, {self.body_ast})"

@@ -1,0 +1,642 @@
+{
+    "node_type": "ProgramNode",
+    "body_ast": [
+        {
+            "node_type": "ClassDeclaration",
+            "data": {
+                "class_name": "Print",
+                "extends_class_name": null,
+                "constructor": {
+                    "node_type": "Constructor",
+                    "data": {
+                        "class_name": "Print",
+                        "parameters": [
+                            {
+                                "node_type": "VariableDeclaration",
+                                "data": {
+                                    "variable_name": "message_",
+                                    "variable_type": "STRING",
+                                    "initialization_type": null
+                                }
+                            }
+                        ],
+                        "body": [
+                            {
+                                "node_type": "VariableDeclaration",
+                                "data": {
+                                    "variable_name": "message",
+                                    "variable_type": "STRING",
+                                    "initialization_type": {
+                                        "node_type": "Value",
+                                        "data": {
+                                            "type": "STRING"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "node_type": "ReturnStatement",
+                                "data": {
+                                    "return_type": "Print",
+                                    "expression": null
+                                }
+                            }
+                        ]
+                    }
+                },
+                "fields": [],
+                "methods": [
+                    {
+                        "node_type": "MethodDeclaration",
+                        "data": {
+                            "return_type": null,
+                            "class_name": "Print",
+                            "method_name": "print",
+                            "parameters": [],
+                            "body": [
+                                {
+                                    "node_type": "VariableDeclaration",
+                                    "data": {
+                                        "variable_name": "message",
+                                        "variable_type": "STRING",
+                                        "initialization_type": {
+                                            "node_type": "Value",
+                                            "data": {
+                                                "type": "STRING"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "node_type": "ClassDeclaration",
+            "data": {
+                "class_name": "HelloWorld",
+                "extends_class_name": null,
+                "constructor": {
+                    "node_type": "Constructor",
+                    "data": {
+                        "class_name": "HelloWorld",
+                        "parameters": [],
+                        "body": [
+                            {
+                                "node_type": "VariableDeclaration",
+                                "data": {
+                                    "variable_name": "message",
+                                    "variable_type": "STRING",
+                                    "initialization_type": {
+                                        "node_type": "Value",
+                                        "data": {
+                                            "type": "STRING"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "node_type": "VariableDeclaration",
+                                "data": {
+                                    "variable_name": "prints",
+                                    "variable_type": "Print",
+                                    "initialization_type": {
+                                        "node_type": "Instantiation",
+                                        "data": {
+                                            "class_name": "Print",
+                                            "arguments": [
+                                                {
+                                                    "node_type": "Value",
+                                                    "data": {
+                                                        "type": "STRING"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "node_type": "MethodCall",
+                                "data": {
+                                    "class_name": "prints",
+                                    "method_name": "print",
+                                    "arguments": [],
+                                    "return_type": null
+                                }
+                            },
+                            {
+                                "node_type": "FunctionCall",
+                                "data": {
+                                    "function_name": "print",
+                                    "arguments": [
+                                        {
+                                            "node_type": "Value",
+                                            "data": {
+                                                "type": "STRING"
+                                            }
+                                        }
+                                    ],
+                                    "return_type": "void"
+                                }
+                            },
+                            {
+                                "node_type": "ReturnStatement",
+                                "data": {
+                                    "return_type": "HelloWorld",
+                                    "expression": null
+                                }
+                            }
+                        ]
+                    }
+                },
+                "fields": [
+                    {
+                        "node_type": "FieldDeclaration",
+                        "data": {
+                            "class_name": "HelloWorld",
+                            "field_name": "fun",
+                            "type": "STRING",
+                            "value": {
+                                "node_type": "Value",
+                                "data": {
+                                    "type": "STRING"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "methods": [
+                    {
+                        "node_type": "MethodDeclaration",
+                        "data": {
+                            "return_type": "STRING",
+                            "class_name": "HelloWorld",
+                            "method_name": "happy",
+                            "parameters": [
+                                {
+                                    "node_type": "VariableDeclaration",
+                                    "data": {
+                                        "variable_name": "hello",
+                                        "variable_type": "STRING",
+                                        "initialization_type": null
+                                    }
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "node_type": "VariableDeclaration",
+                                    "data": {
+                                        "variable_name": "message",
+                                        "variable_type": "STRING",
+                                        "initialization_type": {
+                                            "node_type": "Value",
+                                            "data": {
+                                                "type": "STRING"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "node_type": "VariableDeclaration",
+                                    "data": {
+                                        "variable_name": "prints",
+                                        "variable_type": "Print",
+                                        "initialization_type": {
+                                            "node_type": "Instantiation",
+                                            "data": {
+                                                "class_name": "Print",
+                                                "arguments": [
+                                                    {
+                                                        "node_type": "Value",
+                                                        "data": {
+                                                            "type": "STRING"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "node_type": "MethodCall",
+                                    "data": {
+                                        "class_name": "prints",
+                                        "method_name": "print",
+                                        "arguments": [],
+                                        "return_type": null
+                                    }
+                                },
+                                {
+                                    "node_type": "ReturnStatement",
+                                    "data": {
+                                        "return_type": "STRING",
+                                        "expression": {
+                                            "node_type": "Value",
+                                            "data": {
+                                                "type": "STRING"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "node_type": "VariableDeclaration",
+            "data": {
+                "variable_name": "helloWorld",
+                "variable_type": "HelloWorld",
+                "initialization_type": {
+                    "node_type": "Instantiation",
+                    "data": {
+                        "class_name": "HelloWorld",
+                        "arguments": []
+                    }
+                }
+            }
+        },
+        {
+            "node_type": "MethodCall",
+            "data": {
+                "class_name": "helloWorld",
+                "method_name": "happy",
+                "arguments": [
+                    {
+                        "node_type": "Value",
+                        "data": {
+                            "type": "STRING"
+                        }
+                    }
+                ],
+                "return_type": "STRING"
+            }
+        },
+        {
+            "node_type": "VariableDeclaration",
+            "data": {
+                "variable_name": "a",
+                "variable_type": "INT",
+                "initialization_type": {
+                    "node_type": "Value",
+                    "data": {
+                        "type": "INT"
+                    }
+                }
+            }
+        },
+        {
+            "node_type": "VariableAssignment",
+            "data": {
+                "variable_name": "a",
+                "variable_type": "INT",
+                "assignment_type": {
+                    "node_type": "Value",
+                    "data": {
+                        "type": "INT"
+                    }
+                }
+            }
+        },
+        {
+            "node_type": "VariableDeclaration",
+            "data": {
+                "variable_name": "g",
+                "variable_type": "INT",
+                "initialization_type": null
+            }
+        },
+        {
+            "node_type": "VariableDeclaration",
+            "data": {
+                "variable_name": "b",
+                "variable_type": "INT",
+                "initialization_type": {
+                    "node_type": "Value",
+                    "data": {
+                        "type": "INT"
+                    }
+                }
+            }
+        },
+        {
+            "node_type": "IfStatement",
+            "data": {
+                "condition": {
+                    "node_type": "BinaryOperation",
+                    "data": {
+                        "type_left": {
+                            "node_type": "Value",
+                            "data": {
+                                "type": "INT"
+                            }
+                        },
+                        "operator": "EQ",
+                        "type_right": {
+                            "node_type": "Value",
+                            "data": {
+                                "type": "INT"
+                            }
+                        }
+                    }
+                },
+                "body": [
+                    {
+                        "node_type": "VariableAssignment",
+                        "data": {
+                            "variable_name": "b",
+                            "variable_type": "INT",
+                            "assignment_type": {
+                                "node_type": "Value",
+                                "data": {
+                                    "type": "INT"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "else_body": []
+            }
+        },
+        {
+            "node_type": "FunctionDeclaration",
+            "data": {
+                "return_type": null,
+                "function_name": "test",
+                "parameters": [
+                    {
+                        "node_type": "VariableDeclaration",
+                        "data": {
+                            "variable_name": "c",
+                            "variable_type": "INT",
+                            "initialization_type": null
+                        }
+                    },
+                    {
+                        "node_type": "VariableDeclaration",
+                        "data": {
+                            "variable_name": "d",
+                            "variable_type": "INT",
+                            "initialization_type": null
+                        }
+                    }
+                ],
+                "body": [
+                    {
+                        "node_type": "VariableDeclaration",
+                        "data": {
+                            "variable_name": "a",
+                            "variable_type": "INT",
+                            "initialization_type": {
+                                "node_type": "BinaryOperation",
+                                "data": {
+                                    "type_left": {
+                                        "node_type": "BinaryOperation",
+                                        "data": {
+                                            "type_left": {
+                                                "node_type": "Value",
+                                                "data": {
+                                                    "type": "INT"
+                                                }
+                                            },
+                                            "operator": "PLUS",
+                                            "type_right": {
+                                                "node_type": "Value",
+                                                "data": {
+                                                    "type": "INT"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "operator": "MUL",
+                                    "type_right": {
+                                        "node_type": "Value",
+                                        "data": {
+                                            "type": "INT"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "node_type": "VariableDeclaration",
+                        "data": {
+                            "variable_name": "b",
+                            "variable_type": "INT",
+                            "initialization_type": {
+                                "node_type": "BinaryOperation",
+                                "data": {
+                                    "type_left": {
+                                        "node_type": "BinaryOperation",
+                                        "data": {
+                                            "type_left": {
+                                                "node_type": "Value",
+                                                "data": {
+                                                    "type": "INT"
+                                                }
+                                            },
+                                            "operator": "PLUS",
+                                            "type_right": {
+                                                "node_type": "Value",
+                                                "data": {
+                                                    "type": "INT"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "operator": "MUL",
+                                    "type_right": {
+                                        "node_type": "Value",
+                                        "data": {
+                                            "type": "INT"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "node_type": "FunctionCall",
+            "data": {
+                "function_name": "test",
+                "arguments": [
+                    {
+                        "node_type": "Value",
+                        "data": {
+                            "type": "INT"
+                        }
+                    },
+                    {
+                        "node_type": "Value",
+                        "data": {
+                            "type": "INT"
+                        }
+                    }
+                ],
+                "return_type": null
+            }
+        },
+        {
+            "node_type": "WhileStatement",
+            "data": {
+                "condition": {
+                    "node_type": "BinaryOperation",
+                    "data": {
+                        "type_left": {
+                            "node_type": "Value",
+                            "data": {
+                                "type": "INT"
+                            }
+                        },
+                        "operator": "LT",
+                        "type_right": {
+                            "node_type": "Value",
+                            "data": {
+                                "type": "INT"
+                            }
+                        }
+                    }
+                },
+                "body": [
+                    {
+                        "node_type": "VariableAssignment",
+                        "data": {
+                            "variable_name": "a",
+                            "variable_type": "INT",
+                            "assignment_type": {
+                                "node_type": "BinaryOperation",
+                                "data": {
+                                    "type_left": {
+                                        "node_type": "Value",
+                                        "data": {
+                                            "type": "INT"
+                                        }
+                                    },
+                                    "operator": "PLUS",
+                                    "type_right": {
+                                        "node_type": "Value",
+                                        "data": {
+                                            "type": "INT"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "node_type": "ForStatement",
+            "data": {
+                "variable": {
+                    "node_type": "VariableDeclaration",
+                    "data": {
+                        "variable_name": "i",
+                        "variable_type": "INT",
+                        "initialization_type": {
+                            "node_type": "Value",
+                            "data": {
+                                "type": "INT"
+                            }
+                        }
+                    }
+                },
+                "condition": {
+                    "node_type": "BinaryOperation",
+                    "data": {
+                        "type_left": {
+                            "node_type": "Value",
+                            "data": {
+                                "type": "INT"
+                            }
+                        },
+                        "operator": "LT",
+                        "type_right": {
+                            "node_type": "Value",
+                            "data": {
+                                "type": "INT"
+                            }
+                        }
+                    }
+                },
+                "increment": {
+                    "node_type": "VariableAssignment",
+                    "data": {
+                        "variable_name": "i",
+                        "variable_type": "INT",
+                        "assignment_type": {
+                            "node_type": "BinaryOperation",
+                            "data": {
+                                "type_left": {
+                                    "node_type": "Value",
+                                    "data": {
+                                        "type": "INT"
+                                    }
+                                },
+                                "operator": "PLUS",
+                                "type_right": {
+                                    "node_type": "Value",
+                                    "data": {
+                                        "type": "INT"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "body": [
+                    {
+                        "node_type": "VariableAssignment",
+                        "data": {
+                            "variable_name": "a",
+                            "variable_type": "INT",
+                            "assignment_type": {
+                                "node_type": "BinaryOperation",
+                                "data": {
+                                    "type_left": {
+                                        "node_type": "Value",
+                                        "data": {
+                                            "type": "INT"
+                                        }
+                                    },
+                                    "operator": "PLUS",
+                                    "type_right": {
+                                        "node_type": "Value",
+                                        "data": {
+                                            "type": "INT"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "node_type": "FunctionCall",
+            "data": {
+                "function_name": "print",
+                "arguments": [
+                    {
+                        "node_type": "Value",
+                        "data": {
+                            "type": "INT"
+                        }
+                    }
+                ],
+                "return_type": "void"
+            }
+        }
+    ]
+}
