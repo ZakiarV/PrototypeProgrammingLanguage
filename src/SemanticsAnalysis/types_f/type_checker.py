@@ -20,12 +20,15 @@ from .type_node import TypeWhileStatement
 from src.SyntaxAnalysis.nodes import ProgramNode
 from src.SyntaxAnalysis.nodes import ClassDeclaration
 
+from src.SemanticsAnalysis.symbol_table.symbol_table import BuiltInFunctionSymbolTable
+
 
 class TypeChecker:
     def __init__(self, type_tree, symbol_table):
         self.type_tree = type_tree
         self.symbol_table = symbol_table
         self.token_types = TokenTypes()
+        self.built_in_functions = BuiltInFunctionSymbolTable()
         self.errors = []
 
     def check(self):
@@ -276,6 +279,12 @@ class TypeChecker:
             else:
                 self.errors.append(f"Type mismatch in variable declaration: {node}")
                 return False
+        elif isinstance(node.initialization_type, TypeFunctionCall):
+            if self.check_node(node.initialization_type) == node.variable_type:
+                return True
+            else:
+                self.errors.append(f"Type mismatch in variable declaration: {node}")
+                return False
         else:
             if node.variable_type == node.initialization_type:
                 return True
@@ -292,7 +301,15 @@ class TypeChecker:
 
     def check_type_function_call_node(self, node: TypeFunctionCall):
         if node.function_name in self.token_types.built_in_functions:
-            return True
+            check_arguments = []
+            for arguments in node.arguments:
+                if arguments.type in [self.token_types.FLOAT, self.token_types.INT, self.token_types.STRING, self.token_types.BOOLEAN]:
+                    check_arguments.append(True)
+                else:
+                    self.errors.append(f"Type mismatch in function call: {node}")
+                    check_arguments.append(False)
+            if all(check_arguments):
+                return self.built_in_functions.functions[node.function_name] if not node.type == "void" else True
         else:
             check_arguments = []
             for i in range(len(node.arguments)):
@@ -348,7 +365,6 @@ class TypeChecker:
             else:
                 check_arguments.append(False)
         if all(check_arguments):
-            print(1)
             return node.class_name
         else:
             self.errors.append(f"Type mismatch in class instantiation: {node}")
@@ -358,7 +374,6 @@ class TypeChecker:
         if self.check_node(node.value) == node.type:
             return True
         else:
-            print(node)
             self.errors.append(f"Type mismatch in field declaration: {node}")
             return False
 

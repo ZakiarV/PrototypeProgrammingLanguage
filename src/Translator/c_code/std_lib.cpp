@@ -24,6 +24,10 @@ void wait(int milliseconds_) {
     std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds_));
 }
 
-int cast_int(std::string value) {
+int scasti(std::string value) {
     return std::stoi(value);
+}
+
+std::string icasts(int value) {
+    return std::to_string(value);
 }

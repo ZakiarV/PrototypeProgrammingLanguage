@@ -14,6 +14,8 @@ std::string input(std::string message);
 
 void wait(int milliseconds_);
 
-int cast_int(std::string value);
+int scasti(std::string value);
+
+std::string icasts(int value);
 
 #endif //STD_LIB_H

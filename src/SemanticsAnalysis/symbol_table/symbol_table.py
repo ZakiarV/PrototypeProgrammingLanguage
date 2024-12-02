@@ -2,11 +2,12 @@ class BuiltInFunctionSymbolTable:
     def __init__(self):
         self.functions = {
             "print": "void",
-            "input": "string",
-            "int": "int",
-            "float": "float",
-            "string": "string",
-            "bool": "bool"
+            "input": "STRING",
+            "int": "INT",
+            "float": "FLOAT",
+            "str": "STRING",
+            "bool": "BOOLEAN",
+            "wait": "void"
         }
 
 
@@ -14,11 +15,15 @@ class ForSymbolTable:
     def __init__(self, loop_variable, loop_variable_type, parent):
         self.loop_variable = loop_variable
         self.loop_variable_type = loop_variable_type
+        self.built_in_functions = {}
         self.parent = parent
         self.scope_level = 0
 
     def update_scope_level(self, scope_level):
         self.scope_level = scope_level + 1
+
+    def add_built_in_function(self, function_name):
+        self.built_in_functions[function_name] = BuiltInFunctionSymbolTable().functions[function_name]
 
     def dictionary(self):
         dictionary = {
@@ -26,7 +31,7 @@ class ForSymbolTable:
             "data": {
                 "loop_variable": self.loop_variable,
                 "loop_variable_type": self.loop_variable_type,
-                "parent": self.parent.name,
+                "parent": self.parent.name if isinstance(self.parent, ProgramSymbolTable) else self.parent.function_name,
                 "scope_level": self.scope_level
             }
         }
@@ -46,6 +51,7 @@ class FunctionSymbolTable:
         self.parameters = {}
         self.variables = {}
         self.for_loop_vars = {}
+        self.built_in_functions = {}
         self.return_type = None
         self.scope_level = 0
 
@@ -64,9 +70,21 @@ class FunctionSymbolTable:
     def set_return_type(self, return_type):
         self.return_type = return_type
 
+    def add_built_in_function(self, function_name):
+        self.built_in_functions[function_name] = BuiltInFunctionSymbolTable().functions[function_name]
+        if isinstance(self.parent, ProgramSymbolTable):
+            self.parent.add_built_in_function(function_name)
+        elif isinstance(self.parent, ClassSymbolTable):
+            self.parent.parent.add_built_in_function(function_name)
+
     def get_variable(self, variable_name):
         if variable_name in self.variables:
             return self.variables[variable_name]
+        return None
+
+    def get_for_loop_var(self, loop_variable):
+        if loop_variable in self.for_loop_vars:
+            return self.for_loop_vars[loop_variable]
         return None
 
     def dictionary(self):
@@ -163,6 +181,7 @@ class ProgramSymbolTable:
     def __init__(self, name="main", parent=None):
         self.name = name
         self.parent = parent
+        self.global_built_in_functions = {}
         self.built_in_functions = {}
         self.variables = {}
         self.functions = {}
@@ -204,8 +223,9 @@ class ProgramSymbolTable:
             return self.class_declarations[class_name]
         return None
 
-    def add_built_in_function(self, function_name, function_type):
-        self.built_in_functions[function_name] = BuiltInFunctionSymbolTable().functions[function_type]
+    def add_built_in_function(self, function_name):
+        self.built_in_functions[function_name] = BuiltInFunctionSymbolTable().functions[function_name]
+        self.global_built_in_functions[function_name] = self.built_in_functions[function_name]
 
     def dictionary(self):
         dictionary = {
@@ -217,6 +237,7 @@ class ProgramSymbolTable:
                 "variables": self.variables,
                 "functions": {function_name: function.dictionary() for function_name, function in self.functions.items()},
                 "built_in_functions": self.built_in_functions,
+                "global_built_in_functions": self.global_built_in_functions,
                 "class_declarations": {class_name: class_.dictionary() for class_name, class_ in self.class_declarations.items()},
                 "for_loop_vars": {loop_variable: loop_var.dictionary() for loop_variable, loop_var in self.for_loop_vars.items()}
             }

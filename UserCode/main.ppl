@@ -1,56 +1,19 @@
-class Print {
-    function init(message_: string) {
-        var message: string = message_;
+class Timer {
+    function init(time_: int) {
+        var time = time_;
     }
-    function print() {
-        var message: string = "HELLOOOOOOOOOO"
-    }
-}
 
-class HelloWorld {
-    var fun: string = "Hello, World!";
-    print(fun);
-    function init() {
-        var message: string = "Hello, World!";
-        var prints: Print = new Print(message);
-        prints.print();
-        print(message);
-    }
-    function happy(hello: string) {
-        var message: string = hello;
-        var prints: Print = new Print(message);
-        prints.print();
-        return message;
+    function start() {
+        while (time >= 0) {
+            var str_time = str(time);
+            print(str_time);
+            time = time - 1;
+            wait(1000);
+        }
     }
 }
 
-var helloWorld: HelloWorld = new HelloWorld();
-helloWorld.happy("Hello, World!");
-
-var a = 1
-
-a = 2
-
-var g: int
-
-var b = 1
-if (a == 1) {
-    b = 2
-}
-
-function test(c: int, d: int) {
-    var a = (c + 1) * 2
-    var b = (d + 1) * 2
-}
-
-test(a, b)
-
-while (a < 10) {
-    a = a + 1
-}
-
-for (var i = 0; i < 10; i = i + 1) {
-    a = a + 1
-}
-
-print(a);
+var t = input("Enter time: ");
+var t_int = int(t);
+var timer = new Timer(t_int);
+timer.start();

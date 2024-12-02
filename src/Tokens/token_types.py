@@ -81,6 +81,7 @@ class TokenTypes:
         self.built_in_functions = {
             "print": "PRINT",
             "input": "INPUT",
+            "wait": "WAIT",
             "str": "str",
             "int": "int",
             "float": "float",

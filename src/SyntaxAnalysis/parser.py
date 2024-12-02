@@ -284,6 +284,8 @@ class Parser:
     def parse_expression(self):
         if self.tokens[0].type == self.token_types.NEW:
             return self.parse_class_instantiation()
+        elif self.tokens[0].value in self.token_types.built_in_functions:
+            return self.parse_function_call()
         elif self.tokens[0].type == self.token_types.IDENTIFIER:
             return self.parse_identifier()
         elif self.tokens[1].type == self.token_types.DOT:

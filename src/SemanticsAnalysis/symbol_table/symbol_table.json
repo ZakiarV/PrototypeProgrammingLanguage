@@ -5,38 +5,31 @@
         "parent": null,
         "scope_level": 0,
         "variables": {
-            "helloWorld": "HelloWorld",
-            "a": "INT",
-            "b": "INT"
+            "t": "STRING",
+            "t_int": "INT",
+            "timer": "Timer",
+            "happy": "Happy"
         },
-        "functions": {
-            "test": {
-                "type": "FunctionSymbolTable",
-                "data": {
-                    "function_name": "test",
-                    "parent": "main",
-                    "scope_level": 1,
-                    "parameters": {
-                        "c": "INT",
-                        "d": "INT"
-                    },
-                    "variables": {
-                        "a": "INT",
-                        "b": "INT"
-                    },
-                    "for_loop_vars": {},
-                    "return_type": null
-                }
-            }
-        },
+        "functions": {},
         "built_in_functions": {
-            "print": "void"
+            "str": "STRING",
+            "print": "void",
+            "wait": "void",
+            "input": "STRING",
+            "int": "INT"
+        },
+        "global_built_in_functions": {
+            "str": "STRING",
+            "print": "void",
+            "wait": "void",
+            "input": "STRING",
+            "int": "INT"
         },
         "class_declarations": {
-            "Print": {
+            "Timer": {
                 "type": "ClassSymbolTable",
                 "data": {
-                    "class_name": "Print",
+                    "class_name": "Timer",
                     "parent": "main",
                     "extends": null,
                     "scope_level": 1,
@@ -44,29 +37,29 @@
                         "type": "FunctionSymbolTable",
                         "data": {
                             "function_name": "init",
-                            "parent": "Print",
+                            "parent": "Timer",
                             "scope_level": 2,
                             "parameters": {
-                                "message_": "STRING"
+                                "time_": "INT"
                             },
                             "variables": {},
                             "for_loop_vars": {},
-                            "return_type": "Print"
+                            "return_type": "Timer"
                         }
                     },
                     "fields": {
-                        "message": "STRING"
+                        "time": "INT"
                     },
                     "methods": {
-                        "print": {
+                        "start": {
                             "type": "FunctionSymbolTable",
                             "data": {
-                                "function_name": "print",
-                                "parent": "Print",
+                                "function_name": "start",
+                                "parent": "Timer",
                                 "scope_level": 2,
                                 "parameters": {},
                                 "variables": {
-                                    "message": "STRING"
+                                    "str_time": "STRING"
                                 },
                                 "for_loop_vars": {},
                                 "return_type": null
@@ -75,10 +68,10 @@
                     }
                 }
             },
-            "HelloWorld": {
+            "Happy": {
                 "type": "ClassSymbolTable",
                 "data": {
-                    "class_name": "HelloWorld",
+                    "class_name": "Happy",
                     "parent": "main",
                     "extends": null,
                     "scope_level": 1,
@@ -86,51 +79,29 @@
                         "type": "FunctionSymbolTable",
                         "data": {
                             "function_name": "init",
-                            "parent": "HelloWorld",
+                            "parent": "Happy",
                             "scope_level": 2,
                             "parameters": {},
                             "variables": {},
-                            "for_loop_vars": {},
-                            "return_type": "HelloWorld"
+                            "for_loop_vars": {
+                                "i": {
+                                    "type": "ForSymbolTable",
+                                    "data": {
+                                        "loop_variable": "i",
+                                        "loop_variable_type": "INT",
+                                        "parent": "init",
+                                        "scope_level": 0
+                                    }
+                                }
+                            },
+                            "return_type": "Happy"
                         }
                     },
-                    "fields": {
-                        "message": "STRING",
-                        "prints": "Print",
-                        "fun": "STRING"
-                    },
-                    "methods": {
-                        "happy": {
-                            "type": "FunctionSymbolTable",
-                            "data": {
-                                "function_name": "happy",
-                                "parent": "HelloWorld",
-                                "scope_level": 2,
-                                "parameters": {
-                                    "hello": "STRING"
-                                },
-                                "variables": {
-                                    "message": "STRING",
-                                    "prints": "Print"
-                                },
-                                "for_loop_vars": {},
-                                "return_type": "STRING"
-                            }
-                        }
-                    }
+                    "fields": {},
+                    "methods": {}
                 }
             }
         },
-        "for_loop_vars": {
-            "i": {
-                "type": "ForSymbolTable",
-                "data": {
-                    "loop_variable": "i",
-                    "loop_variable_type": "INT",
-                    "parent": "main",
-                    "scope_level": 0
-                }
-            }
-        }
+        "for_loop_vars": {}
     }
 }

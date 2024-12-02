@@ -124,6 +124,8 @@ class TypeAST:
                 variable = symbol_table.get_variable(node.token.value)
                 if variable:
                     return TypeValueNode(variable, node)
+                elif symbol_table.get_for_loop_var(node.token.value):
+                    return TypeValueNode(symbol_table.get_for_loop_var(node.token.value).loop_variable_type, node)
                 elif isinstance(symbol_table.parent, ProgramSymbolTable):
                     variable = symbol_table.parent.get_variable(node.token.value)
                     if variable:
@@ -132,11 +134,16 @@ class TypeAST:
                         return TypeValueNode(symbol_table.parent.get_variable(node.token.value), node)
                     elif symbol_table.parameters[node.token.value]:
                         return TypeValueNode(symbol_table.parameters[node.token.value], node)
+                    elif symbol_table.get_for_loop_var(node.token.value):
+                        return TypeValueNode(symbol_table.get_for_loop_var(node.token.value), node)
                 elif symbol_table.function_name == "init":
                     try:
                         variable = symbol_table.parameters[node.token.value]
                     except KeyError:
-                        variable = symbol_table.parent.fields[node.token.value]
+                        try:
+                            variable = symbol_table.parent.fields[node.token.value]
+                        except KeyError:
+                            variable = symbol_table.get_for_loop_var(node.token.value).loop_variable_type
                     if variable:
                         return TypeValueNode(variable, node)
                     else:
@@ -153,6 +160,8 @@ class TypeAST:
                         return TypeValueNode(symbol_table.parent.get_field(node.token.value), node)
                     elif symbol_table.parameters[node.token.value]:
                         return TypeValueNode(symbol_table.parameters[node.token.value], node)
+                    elif symbol_table.get_for_loop_var(node.token.value):
+                        return TypeValueNode(symbol_table.get_for_loop_var(node.token.value).loop_variable_type, node)
             elif isinstance(symbol_table, ForSymbolTable):
                 variable = symbol_table.loop_variable_type
                 if variable:
@@ -243,7 +252,13 @@ class TypeAST:
         elif isinstance(symbol_table, ClassSymbolTable):
             type_ = symbol_table.get_field(node.variable_name)
         elif isinstance(symbol_table, FunctionSymbolTable):
-            type_ = symbol_table.get_variable(node.variable_name)
+            if isinstance(symbol_table.parent, ClassSymbolTable):
+                try:
+                    type_ = symbol_table.parent.get_field(node.variable_name)
+                except KeyError:
+                    type_ = symbol_table.get_variable(node.variable_name)
+            else:
+                type_ = symbol_table.get_variable(node.variable_name)
         elif isinstance(symbol_table, ForSymbolTable):
             type_ = symbol_table.loop_variable_type
         else:
@@ -347,7 +362,7 @@ class TypeAST:
 
     def visit_function_call(self, node, symbol_table):
         if isinstance(symbol_table, ProgramSymbolTable):
-            if node.function_name in symbol_table.built_in_functions:
+            if node.function_name in symbol_table.built_in_functions or node.function_name in self.token_types.built_in_functions:
                 function_symbol_table = symbol_table.built_in_functions[node.function_name]
             else:
                 function_symbol_table = symbol_table.functions[node.function_name]
@@ -358,8 +373,8 @@ class TypeAST:
                 function_symbol_table = symbol_table.parent.functions[node.function_name]
         elif isinstance(symbol_table, FunctionSymbolTable):
             if isinstance(symbol_table.parent, ClassSymbolTable):
-                if node.function_name in symbol_table.parent.parent.built_in_functions:
-                    function_symbol_table = symbol_table.parent.parent.built_in_functions[node.function_name]
+                if node.function_name in symbol_table.parent.parent.global_built_in_functions.keys():
+                    function_symbol_table = symbol_table.parent.parent.global_built_in_functions[node.function_name]
                 else:
                     function_symbol_table = symbol_table.parent.parent.functions[node.function_name]
             else:

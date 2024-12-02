@@ -103,6 +103,9 @@ class TypeVariableAssignment:
             }
         }
 
+    def __str__(self):
+        return f"{self.variable_name}: {self.variable_type} = {self.assignment_type.dictionary()}"
+
 
 class TypeMethodCall:
     def __init__(self, class_name, method_name, arguments, return_type, node):

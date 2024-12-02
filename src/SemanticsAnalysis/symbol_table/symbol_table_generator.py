@@ -1,9 +1,9 @@
 import json
 from src.Tokens.token_types import TokenTypes
-from .symbol_table import ProgramSymbolTable, FunctionSymbolTable, ClassSymbolTable
+from .symbol_table import ProgramSymbolTable, FunctionSymbolTable, ClassSymbolTable, BuiltInFunctionSymbolTable
 from src.SyntaxAnalysis.nodes import (ProgramNode, ClassDeclaration, VariableDeclaration, FunctionDeclaration,
                                       ReturnStatement, ValueNode, BinaryOperationNode, ClassInstantiation, ForStatement,
-                                      FunctionCall)
+                                      FunctionCall, IfStatement, WhileStatement)
 
 
 class SymbolTableGenerator:
@@ -35,6 +35,10 @@ class SymbolTableGenerator:
                 self.visit_for_statement(body, symbol_table)
             elif isinstance(body, FunctionCall):
                 self.visit_function_call(body, symbol_table)
+            elif isinstance(body, IfStatement):
+                self.visit_if_statement(body, symbol_table)
+            elif isinstance(body, WhileStatement):
+                self.visit_while_statement(body, symbol_table)
 
     def visit_class_declaration(self, node, symbol_table):
         symbol_table.add_class_declaration(node.class_name)
@@ -51,6 +55,11 @@ class SymbolTableGenerator:
     def visit_field_declaration(self, node, class_symbol_table):
         if isinstance(node.initial_value, ClassInstantiation):
             class_symbol_table.add_field(node.variable_name, node.initial_value.class_name)
+        elif isinstance(node.initial_value, ValueNode):
+            class_symbol_table.add_field(node.variable_name, node.initial_value.token.type)
+        elif isinstance(node.initial_value, BinaryOperationNode):
+            type_ = self.visit_binary_operation(node.initial_value, class_symbol_table)
+            class_symbol_table.add_field(node.variable_name, type_)
         else:
             class_symbol_table.add_field(node.variable_name, node.variable_type)
 
@@ -68,6 +77,10 @@ class SymbolTableGenerator:
                 self.visit_for_statement(statement, method_symbol_table)
             elif isinstance(statement, FunctionCall):
                 self.visit_function_call(statement, method_symbol_table)
+            elif isinstance(statement, IfStatement):
+                self.visit_if_statement(statement, method_symbol_table)
+            elif isinstance(statement, WhileStatement):
+                self.visit_while_statement(statement, method_symbol_table)
 
     def visit_return_statement(self, node, symbol_table: FunctionSymbolTable):
         if isinstance(node.expression, ValueNode):
@@ -85,14 +98,41 @@ class SymbolTableGenerator:
     def visit_constructor_declaration(self, node, class_symbol_table):
         class_symbol_table.set_constructors()
         constructor_symbol_table = class_symbol_table.constructor
-        for statement in node.body_ast:
-            if isinstance(statement, VariableDeclaration):
-                self.visit_field_declaration(statement, class_symbol_table)
-            elif isinstance(statement, ForStatement):
-                self.visit_for_statement(statement, constructor_symbol_table)
         for param in node.parameters:
             constructor_symbol_table.add_parameter(param.variable_name, param.variable_type)
+        for statement in node.body_ast:
+            if isinstance(statement, VariableDeclaration):
+                self.visit_field_constructor_declaration(statement, constructor_symbol_table)
+            elif isinstance(statement, ForStatement):
+                self.visit_for_statement(statement, constructor_symbol_table)
+            elif isinstance(statement, FunctionCall):
+                self.visit_function_call(statement, constructor_symbol_table)
+            elif isinstance(statement, IfStatement):
+                self.visit_if_statement(statement, constructor_symbol_table)
+            elif isinstance(statement, WhileStatement):
+                self.visit_while_statement(statement, constructor_symbol_table)
         constructor_symbol_table.set_return_type(class_symbol_table.name)
+
+    def visit_field_constructor_declaration(self, node, symbol_table):
+        if not node.variable_type:
+            if isinstance(node.initial_value, ClassInstantiation):
+                symbol_table.parent.add_field(node.variable_name, node.initial_value.class_name)
+            elif isinstance(node.initial_value, ValueNode):
+                if node.initial_value.token.type == self.token_types.IDENTIFIER:
+                    if node.initial_value.token.value in symbol_table.parameters.keys():
+                        symbol_table.parent.add_field(node.variable_name, symbol_table.parameters[node.initial_value.token.value])
+                    else:
+                        symbol_table.parent.add_field(node.variable_name, symbol_table.variables[node.initial_value.token.value])
+                else:
+                    symbol_table.parent.add_field(node.variable_name, node.initial_value.token.type)
+            elif isinstance(node.initial_value, FunctionCall):
+                type_ = self.visit_function_call(node.initial_value, symbol_table)
+                symbol_table.parent.add_field(node.variable_name, type_)
+            elif isinstance(node.initial_value, BinaryOperationNode):
+                type_ = self.visit_binary_operation(node.initial_value, symbol_table)
+                symbol_table.parent.add_field(node.variable_name, type_)
+        else:
+            symbol_table.parent.add_field(node.variable_name, node.variable_type)
 
     def visit_function_declaration(self, node, symbol_table):
         symbol_table.add_function(node.function_name)
@@ -108,22 +148,36 @@ class SymbolTableGenerator:
                 self.visit_for_statement(statement, function_symbol_table)
             elif isinstance(statement, FunctionCall):
                 self.visit_function_call(statement, function_symbol_table)
+            elif isinstance(statement, IfStatement):
+                self.visit_if_statement(statement, function_symbol_table)
+            elif isinstance(statement, WhileStatement):
+                self.visit_while_statement(statement, function_symbol_table)
 
     def visit_variable_declaration(self, node, symbol_table):
-        if node.variable_type:
+        if not node.variable_type:
             if isinstance(node.initial_value, ClassInstantiation):
                 symbol_table.add_variable(node.variable_name, node.initial_value.class_name)
             elif isinstance(node.initial_value, ValueNode):
-                symbol_table.add_variable(node.variable_name, node.variable_type)
+                if node.initial_value.token.type == self.token_types.IDENTIFIER:
+                    if isinstance(symbol_table, FunctionSymbolTable):
+                        if node.initial_value.token.value in symbol_table.parameters.keys():
+                            symbol_table.add_variable(node.variable_name, symbol_table.parameters[node.initial_value.token.value])
+                        else:
+                            symbol_table.add_variable(node.variable_name, symbol_table.variables[node.initial_value.token.value])
+                    elif isinstance(symbol_table, ProgramSymbolTable):
+                        symbol_table.add_variable(node.variable_name, symbol_table.get_variable(node.initial_value.token.value))
+                    elif isinstance(symbol_table, ClassSymbolTable):
+                        symbol_table.add_field(node.variable_name, symbol_table.get_field(node.initial_value.token.value))
+                else:
+                    symbol_table.add_variable(node.variable_name, node.initial_value.token.type)
             elif isinstance(node.initial_value, FunctionCall):
-                symbol_table.add_variable(node.variable_name, node.initial_value.function_name)
-                self.visit(node.initial_value, symbol_table)
-        elif isinstance(node.initial_value, BinaryOperationNode):
-            type_ = self.visit_binary_operation(node.initial_value, symbol_table)
-            symbol_table.add_variable(node.variable_name, type_)
+                type_ = self.visit_function_call(node.initial_value, symbol_table)
+                symbol_table.add_variable(node.variable_name, type_)
+            elif isinstance(node.initial_value, BinaryOperationNode):
+                type_ = self.visit_binary_operation(node.initial_value, symbol_table)
+                symbol_table.add_variable(node.variable_name, type_)
         else:
-            node_type = node.initial_value.token.type
-            symbol_table.add_variable(node.variable_name, node_type)
+            symbol_table.add_variable(node.variable_name, node.variable_type)
 
     def visit_binary_operation(self, node, symbol_table):
         if node.operator in [">=", "<=", ">", "<", "==", "!="]:
@@ -181,6 +235,66 @@ class SymbolTableGenerator:
         else:
             symbol_table.add_for_loop_var(node.initializer.variable_name, node.initializer.initial_value.token.type)
 
+        for statement in node.body_ast:
+            if isinstance(statement, VariableDeclaration):
+                self.visit_variable_declaration(statement, symbol_table)
+            elif isinstance(statement, ReturnStatement):
+                self.visit_return_statement(statement, symbol_table)
+            elif isinstance(statement, ForStatement):
+                self.visit_for_statement(statement, symbol_table)
+            elif isinstance(statement, FunctionCall):
+                self.visit_function_call(statement, symbol_table)
+            elif isinstance(statement, IfStatement):
+                self.visit_if_statement(statement, symbol_table)
+            elif isinstance(statement, WhileStatement):
+                self.visit_while_statement(statement, symbol_table)
+
+    def visit_while_statement(self, node, symbol_table):
+        for statement in node.body_ast:
+            if isinstance(statement, VariableDeclaration):
+                self.visit_variable_declaration(statement, symbol_table)
+            elif isinstance(statement, ReturnStatement):
+                self.visit_return_statement(statement, symbol_table)
+            elif isinstance(statement, ForStatement):
+                self.visit_for_statement(statement, symbol_table)
+            elif isinstance(statement, FunctionCall):
+                self.visit_function_call(statement, symbol_table)
+            elif isinstance(statement, IfStatement):
+                self.visit_if_statement(statement, symbol_table)
+            elif isinstance(statement, WhileStatement):
+                self.visit_while_statement(statement, symbol_table)
+
+    def visit_if_statement(self, node, symbol_table):
+        for statement in node.body_ast:
+            if isinstance(statement, VariableDeclaration):
+                self.visit_variable_declaration(statement, symbol_table)
+            elif isinstance(statement, ReturnStatement):
+                self.visit_return_statement(statement, symbol_table)
+            elif isinstance(statement, ForStatement):
+                self.visit_for_statement(statement, symbol_table)
+            elif isinstance(statement, FunctionCall):
+                self.visit_function_call(statement, symbol_table)
+            elif isinstance(statement, IfStatement):
+                self.visit_if_statement(statement, symbol_table)
+            elif isinstance(statement, WhileStatement):
+                self.visit_while_statement(statement, symbol_table)
+
+        if node.else_body_ast:
+            for statement in node.else_body_ast:
+                if isinstance(statement, VariableDeclaration):
+                    self.visit_variable_declaration(statement, symbol_table)
+                elif isinstance(statement, ReturnStatement):
+                    self.visit_return_statement(statement, symbol_table)
+                elif isinstance(statement, ForStatement):
+                    self.visit_for_statement(statement, symbol_table)
+                elif isinstance(statement, FunctionCall):
+                    self.visit_function_call(statement, symbol_table)
+                elif isinstance(statement, IfStatement):
+                    self.visit_if_statement(statement, symbol_table)
+                elif isinstance(statement, WhileStatement):
+                    self.visit_while_statement(statement, symbol_table)
+
     def visit_function_call(self, node, symbol_table):
         if node.is_builtin:
-            self.symbol_table.add_built_in_function(node.function_name, node.function_name)
+            symbol_table.add_built_in_function(node.function_name)
+            return symbol_table.built_in_functions[node.function_name]

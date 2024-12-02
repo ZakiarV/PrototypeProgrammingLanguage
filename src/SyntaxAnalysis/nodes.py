@@ -248,7 +248,7 @@ class FunctionCall:
         }
 
     def __repr__(self):
-        return f"FunctionCall({self.function_name}, {self.arguments})"
+        return f"FunctionCall({self.function_name}, {self.arguments}), {self.is_builtin}"
 
 
 class ReturnStatement:
